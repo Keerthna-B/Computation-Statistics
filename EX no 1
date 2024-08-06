@@ -1,0 +1,30 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import skew, kurtosis
+from sklearn.datasets import load_iris
+iris = load_iris()
+iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+iris_df['species'] = iris.target
+print("First five rows of the dataset:")
+print(iris_df.head())
+attribute = 'sepal length (cm)' 
+if attribute not in iris_df.columns:
+    raise ValueError(f"Attribute '{attribute}' not found in the dataset.")
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+sns.histplot(iris_df[attribute], kde=False, bins=20)
+plt.title(f'Histogram of {attribute}')
+plt.subplot(1, 2, 2)
+sns.kdeplot(iris_df[attribute], shade=True)
+plt.title(f'KDE of {attribute}')
+plt.tight_layout()
+plt.show()
+prob_dist = iris_df[attribute].value_counts(normalize=True)
+print(f"\nProbability distribution of {attribute}:")
+print(prob_dist)
+attr_data = iris_df[attribute]
+attr_skewness = skew(attr_data)
+attr_kurtosis = kurtosis(attr_data)
+print(f"\nSkewness of {attribute}: {attr_skewness:.4f}")
+print(f"Kurtosis of {attribute}: {attr_kurtosis:.4f}")
