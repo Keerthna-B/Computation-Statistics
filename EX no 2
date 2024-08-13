@@ -1,0 +1,20 @@
+import pandas as pd
+import plotly.express as px
+
+# Load the Iris dataset
+df = px.data.iris()
+
+# Print the first 10 records
+print("First 10 records:")
+print(df.head(10))
+
+# Print the number of rows and columns
+print(f"\nNumber of rows: {df.shape[0]}, Number of columns: {df.shape[1]}")
+
+# Print the column names
+print("\nColumn names:")
+print(df.columns)
+
+# Print the mean of all attributes
+print("\nMean of all attributes:")
+print(df.mean(numeric_only=True))
