@@ -1,0 +1,36 @@
+import numpy as np
+import scipy.stats as stats
+import matplotlib.pyplot as plt
+
+# Sample input
+x = np.linspace(-10, 30, 100)  # Independent variable
+e = np.random.normal(0, 5, 100)  # Error term
+y = 10 + 4*x + e  # Dependent variable
+
+# Maximum Likelihood Estimation (MLE)
+def likelihood(params, x, y):
+    beta0, beta1 = params
+    y_pred = beta0 + beta1*x
+    residuals = y - y_pred
+    sigma2 = np.var(residuals)
+    ll = np.sum(stats.norm.logpdf(residuals, loc=0, scale=np.sqrt(sigma2)))
+    return -ll
+
+from scipy.optimize import minimize
+params_init = [0, 0]  # Initial guess for parameters
+res = minimize(likelihood, params_init, args=(x, y), method="SLSQP")
+beta0_mle, beta1_mle = res.x
+
+print("MLE Estimates:")
+print(f"beta0: {beta0_mle:.4f}")
+print(f"beta1: {beta1_mle:.4f}")
+
+# Plot the data and the estimated regression line
+plt.scatter(x, y, label="Data")
+x_pred = np.linspace(-10, 30, 100)
+y_pred = beta0_mle + beta1_mle*x_pred
+plt.plot(x_pred, y_pred, label="Estimated Regression Line", color="red")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.show()
